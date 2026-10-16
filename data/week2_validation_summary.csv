@@ -1,0 +1,2 @@
+comparison,test_customers,MAE,RMSE,spearman_correlation,p_value
+20% vs 0% discount,1331,2.21,2.81,0.869,0.0
