@@ -13,13 +13,13 @@ Train a Causal Forest model to estimate individual treatment effects (ITE) and i
 - Calculated prediction error metrics and Spearman rank correlation.
 
 ****Results****
-Metric| Result
-Test customers| 1,331
-Average estimated ITE| 26.19
-Average true effect| 27.20
-MAE| 2.21
-RMSE| 2.81
-Spearman rank correlation| 0.869
+Metric         Result
+Test customers = 1,331
+Average estimated ITE = 26.19
+Average true effect=27.20
+MAE =2.21
+RMSE= 2.81
+Spearman rank correlation = 0.869
 
 ****Interpretation****
 The model's average estimated treatment effect was close to the average true effect in the synthetic test data. The Spearman correlation of 0.869 indicates strong agreement between the predicted and true customer rankings.
