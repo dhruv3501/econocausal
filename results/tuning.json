@@ -1,0 +1,42 @@
+{
+  "grid": {
+    "n_estimators": [
+      100,
+      200,
+      400
+    ],
+    "learning_rate": [
+      0.03,
+      0.05,
+      0.1
+    ],
+    "num_leaves": [
+      15,
+      31
+    ]
+  },
+  "outcome_model": {
+    "best_params": {
+      "learning_rate": 0.03,
+      "n_estimators": 200,
+      "num_leaves": 15
+    },
+    "cv_rmse": 23.2964
+  },
+  "treatment_model": {
+    "best_params": {
+      "learning_rate": 0.03,
+      "n_estimators": 100,
+      "num_leaves": 15
+    },
+    "cv_logloss": 1.0677
+  },
+  "default": {
+    "ite_rmse_10": 1.3232,
+    "ate_bias_10": 0.2783
+  },
+  "tuned": {
+    "ite_rmse_10": 1.2403,
+    "ate_bias_10": 0.5792
+  }
+}
