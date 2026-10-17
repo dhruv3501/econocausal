@@ -1,0 +1,37 @@
+[
+  {
+    "test": "Placebo treatment (permute T)",
+    "original": 26.9202,
+    "new_effect": -0.0164,
+    "p_value": 0.98,
+    "passed": true
+  },
+  {
+    "test": "Random common cause",
+    "original": 26.9202,
+    "new_effect": 26.9188,
+    "p_value": 0.9,
+    "passed": true
+  },
+  {
+    "test": "Data subset (80%)",
+    "original": 26.9202,
+    "new_effect": 26.9164,
+    "p_value": 0.94,
+    "passed": true
+  },
+  {
+    "test": "Unobserved common cause",
+    "original": 26.9202,
+    "new_effect": 26.9079,
+    "p_value": null,
+    "passed": true
+  },
+  {
+    "test": "DML placebo ($20 vs $0, 3 shuffles)",
+    "original": null,
+    "new_effect": -0.2589,
+    "p_value": null,
+    "passed": true
+  }
+]
