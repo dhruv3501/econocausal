@@ -1,0 +1,33 @@
+{
+  "n_test": 2000,
+  "$10": {
+    "true_ate": 13.5878,
+    "dml_ate": 13.8661,
+    "dml_ate_ci95": [
+      12.7362,
+      14.9961
+    ],
+    "naive_ate": 22.9808,
+    "dml_ate_error": 0.2783,
+    "naive_ate_error": 9.393,
+    "dml_ite_rmse": 1.3232,
+    "naive_ite_rmse": 10.1417,
+    "dml_spearman_vs_true": 0.8922,
+    "dml_top20_overlap": 0.9325
+  },
+  "$20": {
+    "true_ate": 27.1756,
+    "dml_ate": 26.6017,
+    "dml_ate_ci95": [
+      25.4551,
+      27.7483
+    ],
+    "naive_ate": 43.0177,
+    "dml_ate_error": -0.5739,
+    "naive_ate_error": 15.8421,
+    "dml_ite_rmse": 1.4862,
+    "naive_ite_rmse": 17.5918,
+    "dml_spearman_vs_true": 0.9224,
+    "dml_top20_overlap": 0.9475
+  }
+}
