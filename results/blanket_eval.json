@@ -1,0 +1,15 @@
+{
+  "blanket $10": {
+    "spend": 20000.0,
+    "customers_targeted": 2000,
+    "true_incremental_revenue": 27175.6,
+    "roi": 1.359
+  },
+  "blanket $20": {
+    "spend": 40000.0,
+    "customers_targeted": 2000,
+    "true_incremental_revenue": 54351.2,
+    "roi": 1.359
+  },
+  "note": "Optimized policy spends $5000 (budget $5000); blanket policies ignore the budget."
+}
