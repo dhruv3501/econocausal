@@ -54,6 +54,8 @@ python run_pipeline.py --fast   # skips the slow tuning and refutation steps
 | Tune nuisance models | `python src/causal/tune_dml.py` | `results/tuning.json`, `docs/tuning.md`, `models/linear_dml_tuned.joblib` |
 | Refutation tests | `python src/causal/refute.py` | `results/refutation.json`, `docs/causal_audit.md` |
 | Budget optimizer | `python src/optimize/optimizer.py --budget 5000` | `results/allocation.csv`, `results/policy_eval.json` |
+| Blanket-discount baseline | `python src/optimize/blanket_baseline.py` | `results/blanket_eval.json` |
+| Budget sweep | `python src/optimize/budget_sweep.py` | `results/budget_sweep.csv` |
 | Dashboard mock JSON | `python src/export_mock_json.py` | `frontend/public/mock/mock_ite.json`, `mock_uplift.json` |
 
 `run_pipeline.py` covers train, evaluate, tune, refute and optimize. The DoWhy baseline and the dashboard mock JSON export are run separately.
@@ -85,6 +87,7 @@ At a $5,000 budget the MILP optimizer returns an ROI of 2.01, against 1.88 for g
 - `docs/week1.md`, `docs/baseline_results.md`: Week 1 summary and baseline
 - `docs/dml_setup.md`, `docs/model_eval.md`, `docs/tuning.md`: Double ML setup, evaluation, tuning
 - `docs/causal_audit.md`: refutation tests
+- `docs/optimization_design.md`: budget optimizer formulation, baselines, results, budget sweep
 - `docs/mid_review_pack.md`: Mid Review evidence pack
 
 ## Team workflow

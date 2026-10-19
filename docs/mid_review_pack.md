@@ -80,8 +80,12 @@ Result at a **$5,000 budget** (`results/policy_eval.json`; true gain is computab
 | Optimized (MILP) | 5,000 | 307 | 10,067.00 | 2.013 |
 | Greedy $10 by ITE | 5,000 | 500 | 9,420.58 | 1.884 |
 | Random $10 | 5,000 | 500 | 6,744.73 | 1.349 |
+| Blanket $10 (no budget limit) | 20,000 | 2,000 | 27,175.60 | 1.359 |
+| Blanket $20 (no budget limit) | 40,000 | 2,000 | 54,351.20 | 1.359 |
 
 The optimizer beats greedy by about 6.9% in incremental revenue and random by about 49%, and the budget constraint holds (an assertion in the script checks it).
+
+Blanket policies ignore the budget; per dollar, the optimizer earns about 48% more than blanket discounting (2.013 vs 1.359). At a $20,000 budget (the cost of a blanket $10) the optimizer earns about 25% more total revenue than the blanket policy while discounting 1,023 of 2,000 customers. Full budget sweep: `docs/optimization_design.md`.
 
 ## 6. Status against the plan
 
@@ -97,8 +101,8 @@ The optimizer beats greedy by about 6.9% in incremental revenue and random by ab
 | Dashboard: 3 routes, mock JSON | Done (`frontend/`) |
 | SciPy optimizer (Week 3, started early) | Done (`src/optimize/optimizer.py`) |
 | End-to-end runner | Done (`run_pipeline.py`) |
-| Blanket-discount baseline | Open (`src/optimize/blanket_baseline.py`) |
-| Optimization write-up | Open (`docs/optimization_design.md`) |
+| Blanket-discount baseline | Done (`src/optimize/blanket_baseline.py`, `results/blanket_eval.json`) |
+| Optimization write-up | Done (`docs/optimization_design.md`, budget sweep in `results/budget_sweep.csv`) |
 | Real dashboard data + API | Planned for 27 Oct onward |
 
 ## 7. How to reproduce
