@@ -1,0 +1,6 @@
+policy,spend,customers_targeted,true_incremental_revenue,roi,net_roi,predicted_gain,roi_std
+Optimized (MILP),5000.0,307,10067.0,2.013,1.013,10326.39,
+Greedy $10 by ITE,5000.0,500,9420.58,1.884,0.884,,
+Random $10 (mean of 200 seeds),5000.0,500,6790.98,1.358,0.358,,0.016
+Blanket $10 (no budget limit),20000.0,2000,27175.6,1.359,0.359,,
+Blanket $20 (no budget limit),40000.0,2000,54351.2,1.359,0.359,,

@@ -1,4 +1,4 @@
-"""Run the whole EconoCausal pipeline: data -> DML -> evaluation -> audit -> optimizer.
+"""Run the whole EconoCausal pipeline: data -> DML -> evaluation -> audit -> optimizer -> policy evaluation.
 
 Usage:  python run_pipeline.py            (everything)
         python run_pipeline.py --fast     (skip slow tuning + refutation)
@@ -20,7 +20,10 @@ steps += [
 ]
 if not fast:
     steps += [["src/causal/tune_dml.py"], ["src/causal/refute.py"]]
-steps += [["src/optimize/optimizer.py", "--budget", "5000"]]
+steps += [
+    ["src/optimize/optimizer.py", "--budget", "5000"],
+    ["src/optimize/policy_evaluation.py", "--budget", "5000"],
+]
 
 (ROOT / "data").mkdir(exist_ok=True)
 for step in steps:
