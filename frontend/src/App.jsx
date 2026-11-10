@@ -3,7 +3,7 @@ import "./App.css";
 import Plot from "react-plotly.js";
 function App() {
 const [file, setFile] = useState(null);
-const [budget, setBudget] = useState("5000");
+const [budget, setBudget] = useState("");
 const [message, setMessage] = useState("");
 const [campaignResult, setCampaignResult ] = useState(null);
 const [page, setPage] = useState("setup");
@@ -57,16 +57,36 @@ async function handleSubmit(event) {
   formData.append("file", file);
   formData.append("budget", budget);
 
-  const response = await fetch("http://127.0.0.1:8000/upload-csv", {
-    method: "POST",
-    body: formData,
-  });
+  try {
+    const response = await fetch("http://127.0.0.1:8000/upload-csv", {
+      method: "POST",
+      body: formData,
+    });
 
-  const data = await response.json();
-  setCampaignResult(data);
-  setMessage(
-    `Campaign ready: ${data.total_customers} customers | Budget: $${data.budget}`
-  );
+    if (!response.ok) {
+      throw new Error("Campaign analysis failed.");
+    }
+
+    const data = await response.json();
+
+    setCampaignResult(data);
+
+    // Update graphs using the uploaded CSV
+    if (data.customer_results) {
+      setModelResults(data.customer_results);
+    }
+
+    if (data.qini_results) {
+      setQiniResults(data.qini_results);
+    }
+
+    setMessage(
+      `Campaign ready: ${data.total_customers} customers | Budget: $${data.budget}`
+    );
+  } catch (error) {
+    console.error(error);
+    setMessage("Could not analyze the uploaded CSV.");
+  }
 }
 return (
 <main className="dashboard">
@@ -175,68 +195,57 @@ return (
 )}
   </section>
 )}
-   {page === "allocation" && (
+ 
+{page === "allocation" && (
   <section className="panel">
     <h2>Allocation Matrix</h2>
     <p>Customer groups ranked using predicted treatment effects.</p>
-    <table>
-      <thead>
-        <tr>
-          <th>Customer Group</th>
-          <th>Discount</th>
-          <th>Budget Share</th>
-          <th>Customers</th>
-        </tr>
-      </thead>
-      <tbody>
-        {modelResults.length > 0 ? (() => {
-          const sorted = [...modelResults].sort(
-            (a, b) => Number(b.estimated_ite) - Number(a.estimated_ite)
-          );
-          const highCount = campaignResult
-  ? campaignResult.high_uplift.customers
-  : Math.ceil(sorted.length * 0.6);
-const mediumCount = campaignResult
-  ? campaignResult.medium_uplift.customers
-  : Math.ceil(sorted.length * 0.3);
-          const groups = [
-  {
-    name: "High uplift",
-    discount: "20%",
-    share: campaignResult ? `$${campaignResult.high_uplift.budget}` : "60%",
-    count: highCount,
-  },
-  {
-    name: "Medium uplift",
-    discount: "10%",
-    share: campaignResult ? `$${campaignResult.medium_uplift.budget}` : "30%",
-    count: mediumCount,
-  },
-  {
-    name: "Low uplift",
-    discount: "0%",
-    share: campaignResult ? `$${campaignResult.low_uplift.budget}` : "10%",
-    count: sorted.length - highCount - mediumCount,
-  },
-];
-          return groups.map(group => (
-            <tr key={group.name}>
-              <td>{group.name}</td>
-              <td>{group.discount}</td>
-              <td>{group.share}</td>
-              <td>{group.count}</td>
+
+    {campaignResult ? (
+      <>
+        <table>
+          <thead>
+            <tr>
+              <th>Customer Group</th>
+              <th>Discount</th>
+              <th>Budget Share</th>
+              <th>Customers</th>
             </tr>
-          ));
-        })() : (
-          <tr>
-            <td colSpan="4">Loading model results...</td>
-          </tr>
-        )}
-      </tbody>
-    </table>
-    <p className="message">
-      Customer counts and budget allocations are calculated from the campaign analysis.
-    </p>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td>High uplift</td>
+              <td>20%</td>
+              <td>${campaignResult.high_uplift.budget}</td>
+              <td>{campaignResult.high_uplift.customers}</td>
+            </tr>
+
+            <tr>
+              <td>Medium uplift</td>
+              <td>10%</td>
+              <td>${campaignResult.medium_uplift.budget}</td>
+              <td>{campaignResult.medium_uplift.customers}</td>
+            </tr>
+
+            <tr>
+              <td>Low uplift</td>
+              <td>0%</td>
+              <td>${campaignResult.low_uplift.budget}</td>
+              <td>{campaignResult.low_uplift.customers}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p className="message">
+          Customer counts and budget allocations are calculated from the uploaded campaign data.
+        </p>
+      </>
+    ) : (
+      <p className="message">
+        Please upload a CSV and prepare the campaign first.
+      </p>
+    )}
   </section>
 )}
   {page === "qini" && (

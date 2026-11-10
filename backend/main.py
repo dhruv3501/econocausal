@@ -29,31 +29,77 @@ async def upload_csv(
 ):
     contents = await file.read()
     df = pd.read_csv(io.BytesIO(contents))
-    df = df.sort_values("estimated_ite", ascending=False)
-    high_budget = budget * 0.60
-    medium_budget = budget * 0.30
-    low_budget = budget * 0.10
+
     # Check required column
     if "estimated_ite" not in df.columns:
         return {
             "message": "CSV must contain an estimated_ite column"
         }
+
+    # Convert ITE values to numeric
+    df["estimated_ite"] = pd.to_numeric(
+        df["estimated_ite"],
+        errors="coerce"
+    )
+
+    # Remove rows where ITE is missing
+    df = df.dropna(subset=["estimated_ite"])
+
     # Sort customers by estimated treatment effect
     df = df.sort_values(
         by="estimated_ite",
         ascending=False
     ).reset_index(drop=True)
-    # Divide customers into three groups
+
+    # Total customers
     total_customers = len(df)
+
+    # Divide customers into three uplift groups
     high_end = int(total_customers * 0.20)
     medium_end = int(total_customers * 0.50)
+
     high_uplift = df.iloc[:high_end]
     medium_uplift = df.iloc[high_end:medium_end]
     low_uplift = df.iloc[medium_end:]
+
+    # Budget allocation
+    high_budget = budget * 0.60
+    medium_budget = budget * 0.30
+    low_budget = budget * 0.10
+
+    # Customer-level ITE results for the uploaded CSV
+    customer_results = [
+        {
+            "customer": i + 1,
+            "estimated_ite": round(float(ite), 2)
+        }
+        for i, ite in enumerate(df["estimated_ite"])
+    ]
+
+    # Qini-style cumulative uplift results
+    qini_results = []
+
+    cumulative_uplift = 0.0
+
+    for i, ite in enumerate(df["estimated_ite"]):
+        cumulative_uplift += float(ite)
+
+        qini_results.append({
+            "fraction_targeted": (i + 1) / total_customers,
+            "qini_curve": round(cumulative_uplift, 2)
+        })
+
     return {
         "message": "Campaign analysis completed successfully",
+
         "total_customers": total_customers,
+
         "budget": budget,
+
+        "customer_results": customer_results,
+
+        "qini_results": qini_results,
+
         "high_uplift": {
             "customers": len(high_uplift),
             "budget": round(high_budget, 2),
@@ -61,6 +107,7 @@ async def upload_csv(
                 high_uplift["estimated_ite"].mean(), 2
             )
         },
+
         "medium_uplift": {
             "customers": len(medium_uplift),
             "budget": round(medium_budget, 2),
@@ -68,6 +115,7 @@ async def upload_csv(
                 medium_uplift["estimated_ite"].mean(), 2
             )
         },
+
         "low_uplift": {
             "customers": len(low_uplift),
             "budget": round(low_budget, 2),
